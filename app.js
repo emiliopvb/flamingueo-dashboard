@@ -114,10 +114,11 @@ async function fetchCSV(url) {
 // PARSERS CSV
 // =============================================================================
 function parseCSV(csv) {
+  csv = csv.replace(/\r/g, ''); // Remove carriage returns
   const lines = csv.trim().split('\n');
   if (lines.length < 2) return [];
-  const headers = parseCSVLine(lines[0]);
-  return lines.slice(1).map(line => {
+  const headers = parseCSVLine(lines[0]).slice(0, 8); // Max 8 columns
+  return lines.slice(1).filter(l => l.trim()).map(line => {
     const values = parseCSVLine(line);
     const obj = {};
     headers.forEach((h, i) => obj[h.trim()] = (values[i] || '').trim());
@@ -144,6 +145,25 @@ function parseCSVLine(line) {
   return result;
 }
 
+// Parse date from dd/mm/yyyy or yyyy-mm-dd or other formats
+function parseDate(str) {
+  if (!str) return new Date(0);
+  str = str.trim();
+  // dd/mm/yyyy format (European)
+  const euMatch = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (euMatch) {
+    return new Date(parseInt(euMatch[3]), parseInt(euMatch[2]) - 1, parseInt(euMatch[1]));
+  }
+  // yyyy-mm-dd format (ISO)
+  const isoMatch = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (isoMatch) {
+    return new Date(parseInt(isoMatch[1]), parseInt(isoMatch[2]) - 1, parseInt(isoMatch[3]));
+  }
+  // Fallback
+  const d = new Date(str);
+  return isNaN(d.getTime()) ? new Date(0) : d;
+}
+
 function parseResumen(csv) {
   const rows = parseCSV(csv);
   const data = {};
@@ -159,7 +179,7 @@ function parseResumen(csv) {
 function parseResenas(csv) {
   const rows = parseCSV(csv);
   return rows.map(row => ({
-    fecha: new Date(row['Fecha'] || row[Object.keys(row)[0]]),
+    fecha: parseDate(row['Fecha'] || row[Object.keys(row)[0]]),
     autor: row['Autor'] || row[Object.keys(row)[1]] || 'Anonimo',
     estrellas: parseInt(row['Estrellas'] || row[Object.keys(row)[2]]) || 0,
     titulo: row['Titulo'] || row[Object.keys(row)[3]] || '',
@@ -173,7 +193,7 @@ function parseHistorico(csv) {
   return rows.map(row => {
     const get = (key, idx) => (row[key] || row[Object.keys(row)[idx]] || '').replace(',', '.');
     return {
-      fecha: new Date(row['Fecha'] || row[Object.keys(row)[0]]),
+      fecha: parseDate(row['Fecha'] || row[Object.keys(row)[0]]),
       media: parseFloat(get('Puntuacion Media', 1)) || 0,
       total: parseInt(get('Total Resenas', 2)) || 0,
       e5: parseInt(get('Estrellas 5', 3)) || 0,
