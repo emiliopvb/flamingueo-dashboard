@@ -94,12 +94,10 @@ async function loadData() {
     updateLastRefresh();
   } catch (err) {
     console.error('Error cargando datos:', err);
-    // Si falla (CORS desde file:// o red), usar datos de demo
+    // Si falla, usar datos de demo silenciosamente
     if (!state.resenas.length) {
-      console.log('Cargando datos de demo como fallback...');
       loadDemoData();
     } else {
-      showError('Error al actualizar datos. Se muestran los ultimos datos cargados.');
       hideLoading();
     }
   }
