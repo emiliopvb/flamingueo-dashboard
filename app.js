@@ -359,7 +359,7 @@ function renderKPIs() {
   const pctResp = total > 0 ? Math.round((respondidas / total) * 100) : 0;
   const pct5 = total > 0 ? Math.round((e5 / total) * 100) : 0;
 
-  document.getElementById('kpiWeek').textContent = semana;
+  document.getElementById('kpiTotal').textContent = total;
   document.getElementById('kpiMonth').textContent = mes;
   document.getElementById('kpiAvg5').textContent = pct5 + '%';
   document.getElementById('kpiResponseRate').textContent = pctResp + '%';
@@ -517,7 +517,7 @@ function renderEvolutionChart() {
           position: 'top',
           align: 'end',
           labels: {
-            color: '#8888a0',
+            color: '#5f6368',
             font: { family: 'Inter', size: 11 },
             boxWidth: 12,
             boxHeight: 2,
@@ -526,10 +526,10 @@ function renderEvolutionChart() {
           },
         },
         tooltip: {
-          backgroundColor: '#1a1a2e',
-          titleColor: '#f0f0f5',
-          bodyColor: '#8888a0',
-          borderColor: '#2a2a3e',
+          backgroundColor: '#ffffff',
+          titleColor: '#1a1a2e',
+          bodyColor: '#5f6368',
+          borderColor: '#e0e0e0',
           borderWidth: 1,
           padding: 12,
           titleFont: { family: 'Inter', size: 12, weight: '600' },
@@ -541,7 +541,7 @@ function renderEvolutionChart() {
         x: {
           grid: { color: 'rgba(255,255,255,0.03)', drawBorder: false },
           ticks: {
-            color: '#55556a',
+            color: '#9aa0a6',
             font: { family: 'Inter', size: 10 },
             maxTicksLimit: 8,
           },
@@ -636,7 +636,7 @@ function renderMonthlyChart() {
           position: 'top',
           align: 'end',
           labels: {
-            color: '#8888a0',
+            color: '#5f6368',
             font: { family: 'Inter', size: 11 },
             boxWidth: 12,
             boxHeight: 12,
@@ -645,10 +645,10 @@ function renderMonthlyChart() {
           },
         },
         tooltip: {
-          backgroundColor: '#1a1a2e',
-          titleColor: '#f0f0f5',
-          bodyColor: '#8888a0',
-          borderColor: '#2a2a3e',
+          backgroundColor: '#ffffff',
+          titleColor: '#1a1a2e',
+          bodyColor: '#5f6368',
+          borderColor: '#e0e0e0',
           borderWidth: 1,
           padding: 12,
           cornerRadius: 8,
@@ -658,13 +658,13 @@ function renderMonthlyChart() {
         x: {
           stacked: true,
           grid: { display: false },
-          ticks: { color: '#55556a', font: { family: 'Inter', size: 11 } },
+          ticks: { color: '#9aa0a6', font: { family: 'Inter', size: 11 } },
         },
         y: {
           stacked: true,
           grid: { color: 'rgba(255,255,255,0.03)', drawBorder: false },
           ticks: {
-            color: '#55556a',
+            color: '#9aa0a6',
             font: { family: 'Inter', size: 10 },
             stepSize: 1,
           },
